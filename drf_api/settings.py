@@ -40,6 +40,10 @@ ALLOWED_HOSTS = [
     '8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net',
+]
+
 
 # Application definition
 

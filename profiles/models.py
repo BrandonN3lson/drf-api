@@ -1,3 +1,4 @@
+from cloudinary_storage.storage import MediaCloudinaryStorage
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
@@ -10,8 +11,9 @@ class Profile(models.Model):
     name = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
     image = models.ImageField(
-        upload_to='images/',
-        default='../default_profile_ft9xfv'
+        upload_to='images/',  # Files will be uploaded to Cloudinary's 'images/' folder
+        storage=MediaCloudinaryStorage(),  # This directs Django to use Cloudinary for media storage
+        default='../default_profile_ft9xfv.jpg'
     )
 
     class Meta:
