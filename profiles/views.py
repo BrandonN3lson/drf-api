@@ -9,7 +9,7 @@ from drf_api.permissions import IsOwnerOrReadOnly
 
 class ProfileList(APIView):
     """
-    List all profiles
+    List all post
     No Create view (post method), as profile creation handled by django signals
     """
     def get(self, request):
@@ -35,12 +35,16 @@ class ProfileDetail(APIView):
 
     def get(self, request, pk):
         profile = self.get_object(pk)
-        serializer = ProfileSerializer(profile, context={'request': request})
+        serializer = ProfileSerializer(
+                                       profile,
+                                       context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk):
         profile = self.get_object(pk)
-        serializer = ProfileSerializer(profile, data=request.data, context={'request': request})
+        serializer = ProfileSerializer(profile,
+                                       data=request.data,
+                                       context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
