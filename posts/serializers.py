@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from rest_framework import serializers
 from .models import Post
 
@@ -34,3 +35,11 @@ class PostSerializer(serializers.ModelSerializer):
             'profile_image', 'created_at', 'updated_at',
             'title', 'content', 'image', 'image_filter'
         ]
+
+    def create(self, validate_data):
+        try:
+            return super().create(validate_data)
+        except IntegrityError:
+            serializers.ValidationError({
+                'detail': 'Possible duplicate'
+            })
