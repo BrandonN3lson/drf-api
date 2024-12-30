@@ -6,7 +6,9 @@
 # from .serializers import PostSerializer
 # from drf_api.permissions import IsOwnerOrReadOnly
 
-from rest_framework import generics, permissions
+from django.db.models import Count
+from rest_framework import generics, permissions, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_api.permissions import IsOwnerOrReadOnly
 from .models import Post
 from .serializers import PostSerializer
@@ -15,7 +17,32 @@ from .serializers import PostSerializer
 class PostList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
-    queryset = Post.objects.all()
+    queryset = Post.objects.annotate(
+        comments_count=Count('comment', distinct=True),
+        likes_count=Count('likes', distinct=True)
+    ).order_by('-created_at')
+    filter_backends = [
+        filters.OrderingFilter,
+        filters.SearchFilter,
+        DjangoFilterBackend,
+    ]
+
+    filterset_fields = [
+        'owner__followed__owner__profile',
+        'likes__owner__profile',
+        'owner__profile'
+
+    ]
+
+    search_fields = [
+        'owner__username',
+        'title',
+    ]
+
+    ordering_fields = [
+        'comments_count',
+        'likes_count',
+    ]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -24,7 +51,10 @@ class PostList(generics.ListCreateAPIView):
 class PostDetail (generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly]
     serializer_class = PostSerializer
-    queryset = Post.objects.all()
+    queryset = Post.objects.annotate(
+        comments_count=Count('comment', distinct=True),
+        likes_count=Count('likes', distinct=True)
+    ).order_by('-created_at')
 
 
 # class PostList(APIView):
@@ -80,7 +110,8 @@ class PostDetail (generics.RetrieveUpdateDestroyAPIView):
 #         if serializer.is_valid():
 #             serializer.save()
 #             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return Response(serializer.errors,
+#                         status=status.HTTP_400_BAD_REQUEST)
 
 #     def delete(self, request, pk):
 #         post = self.get_object(pk)
