@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import re
 import dj_database_url
 if os.path.exists('env.py'):
     import env # noqa
@@ -63,12 +64,13 @@ DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
     '8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net',
-    'drf-api-app.herokuapp.com',
+    os.environ.get('ALLOWED_HOST'),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net',
     'https://drf-api-app-2cb9957fb29d.herokuapp.com',
+
 
 ]
 
@@ -120,9 +122,13 @@ if 'CLIENT_ORIGIN' in os.environ:
     CORS_ALLOWED_ORIGINS = [
         os.environ.get('CLIENT_ORIGIN')
     ]
-else:
+# else:
+#     CORS_ALLOWED_ORIGIN_REGEXES = [
+#         r"^https:\/\/.*\.codeinstitute-ide\.net$",
+#     ]
+if 'CLIENT_ORIGIN_DEV' in os.environ:
     CORS_ALLOWED_ORIGIN_REGEXES = [
-        r"^https:\/\/.*\.codeinstitute-ide\.net$",
+         r"^https:\/\/.*\.codeinstitute-ide\.net$",
     ]
 
 CORS_ALLOW_CREDENTIALS = True
