@@ -63,16 +63,27 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
+    os.environ.get('ALLOWED_HOST'),
     '8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net',
-    os.environ.get('ALLOWED_HOST', ''),
+    '127.0.0.1',
+    'localhost',
 ]
+print(f"ALLOWED_HOST: {os.environ.get('ALLOWED_HOST')}")
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net',
     'https://drf-api-app-2cb9957fb29d.herokuapp.com',
-
-
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
+if 'CLIENT_ORIGIN' in os.environ:
+    CSRF_TRUSTED_ORIGINS.append(os.environ.get('CLIENT_ORIGIN'))
+
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net',
+#     'https://drf-api-app-2cb9957fb29d.herokuapp.com',
+
+
+# ]
 
 
 # Application definition
