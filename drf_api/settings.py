@@ -64,7 +64,7 @@ DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
     '8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net',
-    os.environ.get('ALLOWED_HOST'),
+    os.environ.get('ALLOWED_HOST', ''),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
