@@ -68,7 +68,6 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-brandonn3lson-drfapi-e18y8rhamlv.ws.codeinstitute-ide.net',
-    'drf-api-app.herokuapp.com',
 
 ]
 
